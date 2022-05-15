@@ -45,7 +45,41 @@ class Graph:
 
     #5. Написать функцию, поиска в неориентированном невзвешенном графе лексикографически первого пути из вершины X.
     # Граф и вершину X задает пользователь.
+    def f5(self, start):
+        graph = self.graph
+        graph = {
+            'e': {'f', 'd'},
+            'f': {'d', 'b', 'a'},
+            'd': {'f', 'b', 'c'},
+            'a': {'b'},
+            'b': {'a','c'},
+            'c': {'b'}
+        }
+        checked = []
+        costs = {key:'' for key in graph.keys()}            #Лексиграфическая стоимость
+        path = []
 
+        def _find_highest_cost_node():                       #Функция поиска узла с наименьшей стоимостью для прихода к ним с начального узла
+            highest_cost = ''
+            highest_cost_node = None
+
+            for node in costs:
+                if costs[node] > highest_cost and node not in checked:
+                    highest_cost = costs[node]
+                    highest_cost_node = node
+            return highest_cost_node
+
+        node = start                    #Первый рассматриваемый узел
+        while node is not None:         #Пока мы не рассмотрели абсолютно каждый узел:
+            path += node
+            neighbors = list(graph[node])
+            for n in neighbors:      #Обновляем стоимость лексиграфическую стоимость соседей(если они уже не были рассмотренны ранее)
+                if n not in checked:
+                    costs[n] += str(len(graph)-len(checked))   #количество узлов в графе - количество просмотренных  = лексиграфическая стоимость
+            checked.append(node)             #Данный узел был разобран
+            node = _find_highest_cost_node() #Ищем следующий узел
+        print(path)
+        return costs
 
     #6. Написать функцию, поиска в неориентированном взвешенном графе кратчейших путей из вершины X до всех остальных вершин.
     # Граф и вершину X задает пользователь.
