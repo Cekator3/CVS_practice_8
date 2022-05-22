@@ -41,18 +41,32 @@ print(Z_Func('abcabdabca'))
 # Функция должна возвращать список чисел - результат расчета префикс-функции.
 # (https://neerc.ifmo.ru/wiki/index.php?title=%D0%9F%D1%80%D0%B5%D1%84%D0%B8%D0%BA%D1%81-%D1%84%D1%83%D0%BD%D0%BA%D1%86%D0%B8%D1%8F)
 def prefix(s):
-    p = [0] * len(s)
+    p = [0] * len(s)  #Длина префикса на каждой позиции
     for i in range(1, len(s)):
-        k = p[i - 1]
-        while k > 0 and s[k] != s[i]:
-            k = p[k - 1]
-        if s[k] == s[i]:
-            k += 1
-        p[i] = k
+        length = p[i-1]    #текущая длина префикса.
+        while(length>0 and s[i]!=s[length]): #Пока последний элемент суффикса не равен текущему рассматриваему элементу
+            length = p[length-1]              #уменьшаем длину префикса
+        if (s[i]==s[length]):   #Если последний элемент суффикса равен текущему рассматриваемому элементу
+            length+=1
+        p[i] = length
     return p
+print(prefix("abcabcd")) #[0, 0, 0, 1, 2, 3, 0]
+print(prefix("aabaaab")) #[0, 1, 0, 1, 2, 2, 3]
 #4. Написать функцию, принимающую от пользователя строку.
-# Функция должна возвращать отсортированный список суффиксов строки.
-# (https://e-maxx.ru/algo/suffix_array)
+# Функция должна возвращать отсортированный список суффиксов строки(суффиксный массив).
+# Сортировка по алфавиту
+
+
 #5. Написать функцию, принимающую от пользователя строку.
 # Функция должна возвращать хеш строки, используя полиномиальную формулу.
 # (https://e-maxx.ru/algo/string_hashes)
+def GetHashCode(s):
+    p = 51
+    hash = 0
+    p_pow = 1
+    MinChar = ord('a')
+    for i in s:
+        hash += (ord(i) - MinChar + 1) * p_pow
+        p_pow *= p
+    return hash
+print(GetHashCode('Hello world'))
